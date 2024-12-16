@@ -1,0 +1,33 @@
+# Ignore all IntelliJ project files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Ignore Maven's target folder
+target/
+
+# Ignore build artifacts
+*.class
+*.jar
+*.war
+*.ear
+
+# Ignore log files
+*.log
+
+# Ignore generated sources
+generated-sources/
+generated-test-sources/
+
+# Ignore test output
+test-classes/
+
+# Ignore temp files
+*.tmp
+*.swp
+*.swo
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
