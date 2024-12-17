@@ -2,9 +2,6 @@
 import org.example.WeatherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,22 +16,30 @@ public class WeatherServiceTest {
 
     @Test
     public void testValidLatitude() {
+        // valid values
         assertTrue(weatherService.isValidLatitude(4.07));
         assertTrue(weatherService.isValidLatitude(-4.07));
+
+        // edge values
         assertTrue(weatherService.isValidLatitude(-90.0));
         assertTrue(weatherService.isValidLatitude(90.0));
 
+        // out of bounds
         assertFalse(weatherService.isValidLatitude(127.0));
         assertFalse(weatherService.isValidLatitude(-127.0));
     }
 
     @Test
     public void testValidLongitude() {
+        // valid values
         assertTrue(weatherService.isValidLongitude(4.07));
         assertTrue(weatherService.isValidLongitude(-4.07));
+
+        // edge values
         assertTrue(weatherService.isValidLongitude(-180.0));
         assertTrue(weatherService.isValidLongitude(180.0));
 
+        // out of bounds
         assertFalse(weatherService.isValidLongitude(200.0));
         assertFalse(weatherService.isValidLongitude(-200.0));
     }

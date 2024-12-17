@@ -7,6 +7,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -41,12 +43,12 @@ public class WeatherService {
 
             Map<String, Object> dailyData = (Map<String, Object>) response.get("daily");
             List<String> dates = (List<String>) dailyData.get("time");
+            List<Integer> weatherCodes = (List<Integer>) dailyData.get("weathercode");
             List<Double> maxTemperatures = (List<Double>) dailyData.get("temperature_2m_max");
             List<Double> minTemperatures = (List<Double>) dailyData.get("temperature_2m_min");
-            List<Integer> weatherCodes = (List<Integer>) dailyData.get("weathercode");
             List<Double> sunshineDurations = (List<Double>) dailyData.get("sunshine_duration");
 
-            List<Map<String, Object>> forecastData = processForecastData(dates, maxTemperatures, minTemperatures, weatherCodes, sunshineDurations);
+            List<Map<String, Object>> forecastData = processForecastData(dates, weatherCodes, maxTemperatures, minTemperatures, sunshineDurations);
 
             return ResponseEntity.ok(forecastData);
 
@@ -86,10 +88,9 @@ public class WeatherService {
             if (dailyData == null || hourlyData == null) {
                 return ResponseEntity.badRequest().body("Missing either daily or hourly data. Check your parameters.");
             }
-
+            List<Integer> weatherCodes = (List<Integer>) dailyData.get("weathercode");
             List<Double> maxTemperatures = (List<Double>) dailyData.get("temperature_2m_max");
             List<Double> minTemperatures = (List<Double>) dailyData.get("temperature_2m_min");
-            List<Integer> weatherCodes = (List<Integer>) dailyData.get("weathercode");
             List<Double> sunshineDurations = (List<Double>) dailyData.get("sunshine_duration");
 
             List<Double> surfacePressures = (List<Double>) hourlyData.get("surface_pressure");
@@ -105,11 +106,11 @@ public class WeatherService {
             long precipDays = weatherCodes.stream().filter(code -> code >= 51).count();
             String summary = precipDays >= 4 ? "z opadami" : "bez opadów";
 
-            Map<String, Object> result = new HashMap<>();
-            result.put("averagePressure", avgPressure);
-            result.put("averageSunshineHours", avgSunshineHours);
+            Map<String, Object> result = new LinkedHashMap<>();
             result.put("minTemperature", overallMinTemp);
             result.put("maxTemperature", overallMaxTemp);
+            result.put("averagePressure", avgPressure);
+            result.put("averageSunshineHours", avgSunshineHours);
             result.put("weeklySummary", summary);
 
             return ResponseEntity.ok(result);
@@ -119,14 +120,24 @@ public class WeatherService {
         }
     }
 
-    private List<Map<String, Object>> processForecastData(List<String> dates, List<Double> maxTemperatures,
-                                                          List<Double> minTemperatures, List<Integer> weatherCodes,
+    private List<Map<String, Object>> processForecastData(List<String> dates,
+                                                          List<Integer> weatherCodes,
+                                                          List<Double> maxTemperatures,
+                                                          List<Double> minTemperatures,
                                                           List<Double> sunshineDurations) {
         List<Map<String, Object>> forecast = new ArrayList<>();
 
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         for (int i = 0; i < dates.size(); i++) {
-            Map<String, Object> dayData = new HashMap<>();
-            dayData.put("date", dates.get(i));
+            Map<String, Object> dayData = new LinkedHashMap<>();
+
+
+            String formattedDate = LocalDate.parse(dates.get(i), inputFormatter).format(outputFormatter);
+
+            dayData.put("date", formattedDate);
             dayData.put("weatherCode", weatherCodes.get(i));
             dayData.put("maxTemperature", round(maxTemperatures.get(i)));
             dayData.put("minTemperature", round(minTemperatures.get(i)));
@@ -153,3 +164,5 @@ public class WeatherService {
         return longitude >= -180 && longitude <= 180;
     }
 }
+
+
