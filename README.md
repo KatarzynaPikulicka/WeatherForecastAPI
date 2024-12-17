@@ -1,13 +1,13 @@
-# Weather Forecast Service
+# 🌤️ Weather Forecast Service
 
 This project provides a 7-day weather forecast and a weekly summary, leveraging data from the [Open-Meteo API](https://api.open-meteo.com/v1/forecast). It is built with Spring Boot and offers REST endpoints to retrieve forecast details for a specified latitude and longitude.
 
-## Features
+## ✨ Features
 
 - **7-Day Forecast**: Retrieve daily maximum and minimum temperatures, weather codes, sunshine duration, and estimated solar energy generation.
 - **Weekly Summary**: Obtain a summary that includes the minimum and maximum temperatures for the week, average atmospheric pressure, average sunshine hours, and a general weather assessment.
 
-## Endpoints
+## 🔗 Endpoints
 
 - **GET** `/weather/7-day-forecast`  
   **Query Parameters:**
@@ -39,7 +39,7 @@ This project provides a 7-day weather forecast and a weekly summary, leveraging 
   - `averageSunshineHours`: The average daily sunshine hours.
   - `weeklySummary`: A textual summary indicating whether the week includes precipitation or not.
 
-## Configuration
+## ⚙️ Configuration
 
 Adjust the `application.properties` as needed:
 
@@ -48,7 +48,7 @@ open-meteo.base-url=https://api.open-meteo.com/v1/forecast
 server.port=8080
 ```
 
-## How to Run
+## 🚀 How to Run
 
 1. **Prerequisites**:
 
@@ -70,7 +70,7 @@ server.port=8080
    http://localhost:8080/weather/7-day-forecast?latitude=50.0&longitude=20.0
    ```
 
-## Testing
+## 🧪 Testing
 
 Unit tests are provided to validate input parameters and behavior under invalid conditions. Execute the tests using your chosen build tool:
 
@@ -79,12 +79,11 @@ Unit tests are provided to validate input parameters and behavior under invalid 
   mvn test
   ```
 
-## License
+## 📜 License
 
 This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute this code, subject to the terms of the license.
 
----
 
-## Author
+## 👤 Author
 
 Made by Kasia Pikulicka
